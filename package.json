@@ -1,0 +1,12 @@
+{
+  "name": "cryptowidget",
+  "version": "1.0.0",
+  "description": "A crypto widget assessment for Red Acre company",
+  "main": "index.js",
+  "repository": "git@github.com:daniellalasa2/CryptoWidget.git",
+  "author": "Daniel Lalasa",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
