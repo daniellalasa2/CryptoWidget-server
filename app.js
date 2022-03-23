@@ -3,8 +3,7 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 
-var usersRouter = require('./Routes/users.routes');
-var adminRouter = require('./Routes/admin.routes');
+var mainRouter = require('./Routes/main.routes');
 
 var app = express();
 
@@ -12,10 +11,10 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const dbURI = process.env.dbURI;
+const DB_URI = process.env.DB_URI;
 
 mongoose
-	.connect(dbURI, {
+	.connect(DB_URI, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
 		useUnifiedTopology: true,
@@ -25,8 +24,7 @@ mongoose
 
 mongoose.Promise = global.Promise;
 
-app.use('/users', usersRouter);
-app.use('/admin', adminRouter)
+app.use('/rates', mainRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
