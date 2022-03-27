@@ -3,37 +3,48 @@
 // const jwt = require("jsonwebtoken");
 const RatesModel = require("../Models/rates");
 const axios = require("axios");
-MongoClient = require('mongodb').MongoClient;
+MongoClient = require("mongodb").MongoClient;
 
-const getRates = axios({
-	url: process.env.RATES_API_BASEURL,
-	path: "/simple/price",
-	method: "GET",
-	params:{
-		ids:"bitcoin,ethereum,litecoin,xrp",
-		vs_currencies:"usd,eur,gbp"
-	},
-	headers:{
-		"Content-Type":"application/json"
-	}
-}).then(freshRatesObj=>{
-	console.log(res);
-	MongoClient.connect(process.env.DB_URI, function(err, db) {
-		if (err) throw err;
-		let dbo = db.db("cwdb");
-		let dbObj = {
-			rates: freshRatesObj
-		} 
-		dbo.collection("rates").insertOne(dbObj, function(err, res) {
-		  if (err) throw err;
-		  console.log("1 document inserted");
-		  db.close();
+const getRates = async (req, res) => {
+	axios({
+		url: process.env.RATES_API_BASEURL,
+		path: "/simple/price",
+		method: "GET",
+		params: {
+			ids: "bitcoin,ethereum,litecoin,xrp",
+			vs_currencies: "usd,eur,gbp",
+		},
+		headers: {
+			"Content-Type": "application/json",
+		},
+	}).then((freshRatesObj) => {
+		console.log(res);
+		MongoClient.connect(process.env.DB_URI, function (err, db) {
+			if (err)
+				res.status(500).json({
+					code: 500,
+					message: err,
+				});
+			let dbo = db.db("cwdb");
+			let dbObj = {
+				rates: freshRatesObj,
+			};
+			dbo.collection("rates").insertOne(dbObj, function (err, res) {
+				if (err)
+					res.status(500).json({
+						code: 500,
+						message: err,
+					});
+				res.status(201).json({
+					code: 201,
+					message: "Successful rate update",
+				});
+				console.log("1 document inserted");
+				db.close();
+			});
 		});
-	  });
-});
- 
-
-
+	});
+};
 
 // const adminLogin = (req, res, next) => {
 // 	Admin.find({ email: req.body.email })
@@ -104,4 +115,4 @@ const getRates = axios({
 // 	}
 // };
 
-module.exports = {getRates};
+module.exports = { getRates };

@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
@@ -28,10 +30,9 @@ mongoose.Promise = global.Promise;
 // Websocket server connection
 
 const wss = new WebSocketServer.Server({
-	server: app.listen(process.env.HTTP_PORT),
+	server: app.listen(process.env.WSS_PORT),
 	path: process.env.WSS_PATH,
 	host: process.env.WSS_HOST,
-	port: process.env.WSS_PORT
 });
 
 wss.on("connection", (socket) => {
@@ -49,7 +50,6 @@ wss.on("connection", (socket) => {
 		console.log("Some Error occurred");
 	};
 });
-
 
 // ROUTES
 
@@ -72,7 +72,8 @@ app.use(function (err, req, res, next) {
 	});
 });
 
-
-app.listen(process.env.HTTP_PORT,()=>console.log("Listening on port: "+process.env.HTTP_PORT));
+app.listen(process.env.HTTP_PORT, () =>
+	console.log("Listening on port: " + process.env.HTTP_PORT),
+);
 
 module.exports = app;
