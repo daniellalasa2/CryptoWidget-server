@@ -1,5 +1,5 @@
 // const bcrypt = require("bcrypt");
-require("../node_modules/dotenv").config();
+// require("../node_modules/dotenv").config();
 // const jwt = require("jsonwebtoken");
 const RatesModel = require("../Models/rates");
 const axios = require("axios");
@@ -20,8 +20,11 @@ const getRates = axios({
 	console.log(res);
 	MongoClient.connect(process.env.DB_URI, function(err, db) {
 		if (err) throw err;
-		var dbo = db.db("cwdb");
-		dbo.collection("rates").insertOne(freshRatesObj, function(err, res) {
+		let dbo = db.db("cwdb");
+		let dbObj = {
+			rates: freshRatesObj
+		} 
+		dbo.collection("rates").insertOne(dbObj, function(err, res) {
 		  if (err) throw err;
 		  console.log("1 document inserted");
 		  db.close();

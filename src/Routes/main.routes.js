@@ -3,7 +3,7 @@ const express = require('express');
 const ratesControllers = require('../Controllers/rates.controllers');
 const router = express.Router();
 
-router.get('/coinrates', ratesControllers.getRates);
+router.get('/getrates', ratesControllers.getRates);
 // router.post('/login', adminControllers.adminLogin);
 // router.get('/me', checkAuth, adminControllers.getMe);
 
